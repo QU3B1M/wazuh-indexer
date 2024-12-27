@@ -25,6 +25,7 @@ jobs:
       - name: Extract ECS Modules and Run ECS Generator
         id: run-ecs-generator
         run: |
+          rm -rf .git
           # Fetch base branch
           git fetch origin +refs/heads/master:refs/remotes/origin/master
 
@@ -127,7 +128,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          rm -rf .git
           cd wazuh-indexer-plugins
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
