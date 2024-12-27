@@ -586,6 +586,7 @@ fields:
             roles: {}
             target:
                 fields:
+                    email: {}
                     group:
                         fields: "*"
                     full_name: {}
