@@ -149,8 +149,8 @@ jobs:
           else
             echo "branch does not exist"
             git checkout $branch_name 
-            git pull origin $branch_name 
-            git push --set-upstream origin
+            git pull
+            git push --set-upstream origin $branch_name
           fi
 
           # Map ECS modules to target JSON filenames

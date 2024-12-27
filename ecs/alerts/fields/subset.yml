@@ -587,7 +587,6 @@ fields:
             target:
                 fields:
                     domain: {}
-                    email: {}
                     group:
                         fields: "*"
                     full_name: {}
