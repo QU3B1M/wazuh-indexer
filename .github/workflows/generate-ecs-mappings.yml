@@ -91,8 +91,8 @@ jobs:
       - name: Checkout target repository
         uses: actions/checkout@v4
         with:
-          repository: wazuh/wazuh-indexer-plugins
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: QU3B1M/wazuh-indexer-plugins
+          token: ${{ secrets.TEST_TOKEN }}
           path: wazuh-indexer-plugins
 
       - name: Copy generated files to target repository
@@ -147,7 +147,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TEST_TOKEN }}
           commit-message: "Update ECS templates for modified modules: $relevant_modules"
           branch: update-ecs-templates
           title: "Update ECS templates for modified modules: $relevant_modules"
