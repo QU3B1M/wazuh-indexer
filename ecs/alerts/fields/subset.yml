@@ -589,6 +589,7 @@ fields:
                     group:
                         fields: "*"
                     hash: {}
+                    id: {}
                     name: {}
     vlan:
         fields: "*"
