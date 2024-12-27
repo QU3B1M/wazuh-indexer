@@ -588,7 +588,6 @@ fields:
                 fields:
                     group:
                         fields: "*"
-                    full_name: {}
                     hash: {}
                     id: {}
                     name: {}
