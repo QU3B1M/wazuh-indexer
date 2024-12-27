@@ -121,12 +121,13 @@ jobs:
               continue
             fi
 
-            mkdir -p wazuh-indexer-plugins/plugins/setup/src/main/resources/
+            mkdir -p ../wazuh-indexer-plugins/plugins/setup/src/main/resources/
             cp ecs/$ecs_module/mappings/v8.11.0/generated/elasticsearch/legacy/template.json wazuh-indexer-plugins/plugins/setup/src/main/resources/$target_file
           done
 
       - name: Commit and push changes
         run: |
+          rm -rf .git
           cd wazuh-indexer-plugins
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
