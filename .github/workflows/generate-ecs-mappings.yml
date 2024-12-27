@@ -143,6 +143,7 @@ jobs:
           # Check if branch exists
           if git rev-parse --verify $branch_name 2>/dev/null; then
             git checkout $branch_name
+            git pull
           else
             git checkout -b $branch_name
             git push --set-upstream origin $branch_name
