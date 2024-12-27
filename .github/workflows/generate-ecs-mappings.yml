@@ -3,8 +3,8 @@ name: ECS Generator
 on:
   push:
     paths:
-      - 'ecs/**/*.json'
-      - 'ecs/**/*.yml'
+      - 'ecs/**'
+      - 'ecs/**'
 
 jobs:
   run-ecs-generator:
