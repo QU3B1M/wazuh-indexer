@@ -25,7 +25,6 @@ jobs:
       - name: Extract ECS Modules and Run ECS Generator
         id: run-ecs-generator
         run: |
-          rm -rf .git
           # Fetch base branch
           git fetch origin +refs/heads/master:refs/remotes/origin/master
 
@@ -80,7 +79,9 @@ jobs:
 
       - name: Tear down ECS Generator
         if: always()
-        run: bash ecs/generator/mapping-generator.sh down
+        run: |
+          rm -rf .git
+          bash ecs/generator/mapping-generator.sh down
 
       - name: Upload artifact
         if: always()
@@ -122,7 +123,7 @@ jobs:
               continue
             fi
 
-            mkdir -p ../wazuh-indexer-plugins/plugins/setup/src/main/resources/
+            mkdir -p wazuh-indexer-plugins/plugins/setup/src/main/resources/
             cp ecs/$ecs_module/mappings/v8.11.0/generated/elasticsearch/legacy/template.json wazuh-indexer-plugins/plugins/setup/src/main/resources/$target_file
           done
 
