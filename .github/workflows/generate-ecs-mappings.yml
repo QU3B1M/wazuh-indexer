@@ -143,13 +143,16 @@ jobs:
 
           # Check if branch exists
           if git show-ref -q --heads $branch_name; then
+            echo "branch exists"
             git checkout $branch_name
             git pull
           else
+            echo "branch does not exist"
             git checkout -b $branch_name
+            git pull
             git push --set-upstream origin $branch_name
           fi
-
+          echo "im here"
           git add .
           git commit -m "Update ECS templates for modified modules: $relevant_modules"
           git push
