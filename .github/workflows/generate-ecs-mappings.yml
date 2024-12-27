@@ -142,15 +142,15 @@ jobs:
           branch_name=${{ steps.branch-name.outputs.branch }}
 
           # Check if branch exists
-          if [ `git branch | egrep "^[[:space:]]+${branchname}$"` ]; then
+          if git rev-parse --verify --quiet $branch_name; then
             echo "branch exists"
             git checkout $branch_name
             git pull
           else
             echo "branch does not exist"
-            git checkout -b $branch_name
-            git pull
-            git push --set-upstream origin $branch_name
+            git checkout -b $branch_name 
+            git pull origin $branch_name 
+            git push --set-upstream origin
           fi
           echo "im here"
           git add .
