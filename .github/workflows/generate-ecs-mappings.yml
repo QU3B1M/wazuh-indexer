@@ -102,8 +102,57 @@ jobs:
           token: ${{ secrets.TEST_TOKEN }}
           path: wazuh-indexer-plugins
 
-      - name: Copy generated files to target repository
+      # - name: Copy generated files to target repository
+      #   run: |
+      #     # Map ECS modules to target JSON filenames
+      #     declare -A module_to_file=(
+      #       [agent]="index-template-agent.json"
+      #       [alerts]="index-template-alerts.json"
+      #       [commands]="index-template-commands.json"
+      #       [hardware]="index-template-hardware.json"
+      #       [hotfixes]="index-template-hotfixes.json"
+      #       [fim]="index-template-fim.json"
+      #       [networks]="index-template-networks.json"
+      #       [packages]="index-template-packages.json"
+      #       [ports]="index-template-ports.json"
+      #       [processes]="index-template-processes.json"
+      #       [scheduled-commands]="index-template-scheduled-commands.json"
+      #       [system]="index-template-system.json"
+      #       [vulnerabilities]="index-template-vulnerabilities.json"
+      #     )
+
+      #     for ecs_module in ${relevant_modules[@]}; do
+      #       target_file=${module_to_file[$ecs_module]}
+      #       if [[ -z "$target_file" ]]; then
+      #         echo "No corresponding file for module $ecs_module"
+      #         continue
+      #       fi
+
+      #       mkdir -p wazuh-indexer-plugins/plugins/setup/src/main/resources/
+      #       cp ecs/$ecs_module/mappings/v8.11.0/generated/elasticsearch/legacy/template.json wazuh-indexer-plugins/plugins/setup/src/main/resources/$target_file
+      #     done
+
+      - name: Commit and push changes
         run: |
+          cd wazuh-indexer-plugins
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git pull
+
+          branch_name=${{ steps.branch-name.outputs.branch }}
+
+          # Check if branch exists
+          if git rev-parse --verify --quiet $branch_name; then
+            echo "branch exists"
+            git checkout $branch_name
+            git pull
+          else
+            echo "branch does not exist"
+            git checkout $branch_name 
+            git pull origin $branch_name 
+            git push --set-upstream origin
+          fi
+
           # Map ECS modules to target JSON filenames
           declare -A module_to_file=(
             [agent]="index-template-agent.json"
@@ -128,31 +177,10 @@ jobs:
               continue
             fi
 
-            mkdir -p wazuh-indexer-plugins/plugins/setup/src/main/resources/
-            cp ecs/$ecs_module/mappings/v8.11.0/generated/elasticsearch/legacy/template.json wazuh-indexer-plugins/plugins/setup/src/main/resources/$target_file
+            mkdir -p plugins/setup/src/main/resources/
+            cp ../ecs/$ecs_module/mappings/v8.11.0/generated/elasticsearch/legacy/template.json plugins/setup/src/main/resources/$target_file
           done
 
-      - name: Commit and push changes
-        run: |
-          cd wazuh-indexer-plugins
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git pull
-
-          branch_name=${{ steps.branch-name.outputs.branch }}
-
-          # Check if branch exists
-          if git rev-parse --verify --quiet $branch_name; then
-            echo "branch exists"
-            git checkout $branch_name
-            git pull
-          else
-            echo "branch does not exist"
-            git checkout -b $branch_name 
-            git pull origin $branch_name 
-            git push --set-upstream origin
-          fi
-          echo "im here"
           git add .
           git commit -m "Update ECS templates for modified modules: $relevant_modules"
           git push
