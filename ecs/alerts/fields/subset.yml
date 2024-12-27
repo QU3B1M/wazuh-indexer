@@ -592,6 +592,7 @@ fields:
                         fields: "*"
                     full_name: {}
                     hash: {}
+                    id: {}
     vlan:
         fields: "*"
     vulnerability:
