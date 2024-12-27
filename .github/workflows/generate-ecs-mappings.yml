@@ -191,7 +191,7 @@ jobs:
           token: ${{ secrets.TEST_TOKEN }}
           path: wazuh-indexer-plugins
           commit-message: "Update ECS templates for modified modules: $relevant_modules"
-          branch: update-ecs-templates
+          branch: ${{ steps.branch-name.outputs.branch }}
           title: "Update ECS templates for modified modules: $relevant_modules"
           body: "This PR updates the ECS templates for the following modules: $relevant_modules."
           base: master
