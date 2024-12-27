@@ -49,7 +49,7 @@ function main() {
 
     navigate_to_project_root
 
-    compose_command="docker compose -f $compose_filename"
+    compose_command="docker-compose -f $compose_filename"
 
     case $1 in
         run)
