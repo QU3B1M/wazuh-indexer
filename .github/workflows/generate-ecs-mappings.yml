@@ -145,11 +145,12 @@ jobs:
             git checkout $branch_name
           else
             git checkout -b $branch_name
+            git push --set-upstream origin $branch_name
           fi
 
           git add .
           git commit -m "Update ECS templates for modified modules: $relevant_modules"
-          git push origin $branch_name
+          git push
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
