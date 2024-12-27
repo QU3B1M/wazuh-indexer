@@ -137,7 +137,7 @@ jobs:
           cd wazuh-indexer-plugins
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git fetch
+          git pull
 
           branch_name=${{ steps.branch-name.outputs.branch }}
 
