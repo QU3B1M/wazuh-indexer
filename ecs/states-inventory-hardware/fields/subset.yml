@@ -8,8 +8,6 @@ fields:
   agent:
     fields:
       groups: {}
-      id: {}
-      name: {}
       type: {}
       version: {}
       host:
@@ -19,5 +17,7 @@ fields:
       serial_number: {}
   host:
     fields: 
+      memory: 
+        fields: "*"
       cpu: 
         fields: "*"

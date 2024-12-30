@@ -31,4 +31,4 @@ jobs:
         run: |
           bash ecs/scripts/generate-pr-to-plugins.sh \
           -b ${{ steps.branch-name.outputs.branch-name }} \
-          -t ${{ secrets.PAT_TOKEN }}
+          -t ${{ secrets.ACTION_TOKEN }}
