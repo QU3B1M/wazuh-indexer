@@ -19,8 +19,6 @@ fields:
             address: {}
             as:
                 fields: "*"
-            bytes: {}
-            domain: {}
             geo:
                 fields: "*"
             ip: {}
@@ -574,7 +572,6 @@ fields:
                     id: {}
                     name: {}
                     roles: {}
-            email: {}
             group:
                 fields: "*"
             full_name: {}
@@ -587,17 +584,16 @@ fields:
             target:
                 fields:
                     domain: {}
-                    email: {}
                     group:
                         fields: "*"
                     full_name: {}
                     hash: {}
                     id: {}
                     name: {}
-                    roles: {}
     vlan:
         fields: "*"
     vulnerability:
         fields: "*"
-    x509:
-        fields: "*"
+
+
+
