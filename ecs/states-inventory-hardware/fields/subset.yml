@@ -8,6 +8,7 @@ fields:
   agent:
     fields:
       groups: {}
+      id: {}
       host:
         fields: "*"
   observer:
