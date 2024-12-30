@@ -19,5 +19,5 @@ fields:
       serial_number: {}
   host:
     fields: 
-      memory: 
+      cpu: 
         fields: "*"
