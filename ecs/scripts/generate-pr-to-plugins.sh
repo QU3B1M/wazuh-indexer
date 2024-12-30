@@ -99,9 +99,9 @@ clone_target_repo() {
     git pull
 
     # Set up authentication with GitHub token
-    git remote set-url origin https://github.com/$PLUGINS_REPO.git
+    git remote set-url origin https://"$GITHUB_TOKEN"@github.com/$PLUGINS_REPO.git
     # Set up the default remote URL
-    gh repo set-default https://github.com/$PLUGINS_REPO.git
+    gh repo set-default https://"$GITHUB_TOKEN"@github.com/$PLUGINS_REPO.git
 }
 
 commit_and_push_changes() {
