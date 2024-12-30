@@ -99,9 +99,9 @@ clone_target_repo() {
     git pull
 
     # Set up authentication with GitHub token
-    git remote set-url origin https://"$GH_TOKEN"@github.com/$PLUGINS_REPO.git
+    git remote set-url origin https://github.com/$PLUGINS_REPO.git
     # Set up the default remote URL
-    gh repo set-default https://"$GH_TOKEN"@github.com/$PLUGINS_REPO.git
+    gh repo set-default https://github.com/$PLUGINS_REPO.git
 }
 
 commit_and_push_changes() {
@@ -146,33 +146,33 @@ commit_and_push_changes() {
 create_or_update_pr() {
     echo
     echo "---> Creating or updating Pull Request..."
-    GITHUB_TOKEN="$GH_TOKEN" gh auth login --with-token
+    gh auth login --with-token
     local existing_pr
     local modules
     local title="Update ECS templates for modified modules: ${modules}"
     local body="This PR updates the ECS templates for the following modules: ${modules}."
-    existing_pr=$(GITHUB_TOKEN="$GH_TOKEN" gh pr list --head "$branch_name" --json number --jq '.[].number')
+    existing_pr=$(gh pr list --head "$branch_name" --json number --jq '.[].number')
     modules=$(IFS=,; echo "${relevant_modules[*]}")
 
     if [ -z "$existing_pr" ]; then
-        GITHUB_TOKEN="$GH_TOKEN" gh pr create \
+        gh pr create \
             --title "$title" \
             --body "$body" \
             --base master \
             --head "$branch_name"
     else
         echo "PR already exists: $existing_pr. Updating the PR..."
-        GITHUB_TOKEN="$GH_TOKEN" gh pr edit "$existing_pr" \
+        gh pr edit "$existing_pr" \
             --title "$title" \
             --body "$body"
     fi
 }
 
 usage() {
-    echo "Usage: $0 -b <branch_name> -t <GH_TOKEN>"
+    echo "Usage: $0 -b <branch_name> -t <GITHUB_TOKEN>"
     echo "  -b <branch_name>    Branch name to create or update the PR."
-    echo "  -t [GH_TOKEN]       (Optional) GitHub token to authenticate with GitHub API."
-    echo "                      If not provided, the script will use the GH_TOKEN environment variable."
+    echo "  -t [GITHUB_TOKEN]   (Optional) GitHub token to authenticate with GitHub API."
+    echo "                      If not provided, the script will use the GITHUB_TOKEN environment variable."
     exit 1
 }
 
@@ -183,7 +183,7 @@ main() {
                 branch_name=$OPTARG
                 ;;
             t )
-                GH_TOKEN=$OPTARG
+                GITHUB_TOKEN=$OPTARG
                 ;;
             \? )
                 usage
@@ -194,7 +194,7 @@ main() {
                 ;;
         esac
     done
-    if [ -z "$branch_name" ] || [ -z "$GH_TOKEN" ]; then
+    if [ -z "$branch_name" ] || [ -z "$GITHUB_TOKEN" ]; then
         usage
     fi
 
