@@ -19,8 +19,6 @@ fields:
             address: {}
             as:
                 fields: "*"
-            bytes: {}
-            domain: {}
             geo:
                 fields: "*"
             ip: {}
@@ -596,8 +594,6 @@ fields:
     vlan:
         fields: "*"
     vulnerability:
-        fields: "*"
-    x509:
         fields: "*"
 
 
