@@ -71,7 +71,6 @@ fetch_and_extract_modules() {
     echo "Relevant ECS modules: ${relevant_modules[*]}"
 }
 
-# Function to run ECS generator
 run_ecs_generator() {
     echo
     echo "---> Running ECS Generator script..."
@@ -79,6 +78,7 @@ run_ecs_generator() {
         for ecs_module in "${relevant_modules[@]}"; do
             bash ecs/generator/mapping-generator.sh run "$ecs_module"
             echo "Processed ECS module: $ecs_module"
+            bash ecs/generator/mapping-generator.sh down
         done
     else
         echo "No relevant modifications detected in ecs/ directory."
@@ -86,9 +86,6 @@ run_ecs_generator() {
     fi
 }
 
-teardown_ecs_generator() {
-    bash ecs/generator/mapping-generator.sh down
-}
 
 clone_target_repo() {
     echo
@@ -201,7 +198,6 @@ main() {
     validate_dependencies
     fetch_and_extract_modules
     run_ecs_generator
-    teardown_ecs_generator
     clone_target_repo
     commit_and_push_changes
 
