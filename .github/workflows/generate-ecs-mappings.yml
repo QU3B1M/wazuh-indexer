@@ -28,7 +28,8 @@ jobs:
         run: sudo apt-get install docker-compose
 
       - name: Generate PR to wazuh-indxer-plugins
+        env:
+          GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
           bash ecs/scripts/generate-pr-to-plugins.sh \
-            -b ${{ steps.branch-name.outputs.branch }} \
-            -t ${{ secrets.ACTION_TOKEN }}
+            -b ${{ steps.branch-name.outputs.branch }}
