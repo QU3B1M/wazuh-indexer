@@ -146,23 +146,23 @@ commit_and_push_changes() {
 create_or_update_pr() {
     echo
     echo "---> Creating or updating Pull Request..."
-    echo "$GH_TOKEN" | gh auth login --with-token
+    GITHUB_TOKEN="$GH_TOKEN" gh auth login --with-token
     local existing_pr
     local modules
     local title="Update ECS templates for modified modules: ${modules}"
     local body="This PR updates the ECS templates for the following modules: ${modules}."
-    existing_pr=$(gh pr list --head "$branch_name" --json number --jq '.[].number')
+    existing_pr=$(GITHUB_TOKEN="$GH_TOKEN" gh pr list --head "$branch_name" --json number --jq '.[].number')
     modules=$(IFS=,; echo "${relevant_modules[*]}")
 
     if [ -z "$existing_pr" ]; then
-        gh pr create \
+        GITHUB_TOKEN="$GH_TOKEN" gh pr create \
             --title "$title" \
             --body "$body" \
             --base master \
             --head "$branch_name"
     else
         echo "PR already exists: $existing_pr. Updating the PR..."
-        gh pr edit "$existing_pr" \
+        GITHUB_TOKEN="$GH_TOKEN" gh pr edit "$existing_pr" \
             --title "$title" \
             --body "$body"
     fi
