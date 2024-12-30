@@ -99,9 +99,9 @@ clone_target_repo() {
     git pull
 
     # Set up authentication with GitHub token
-    git remote set-url origin https://"$github_token"@github.com/$PLUGINS_REPO.git
+    git remote set-url origin https://"$GH_TOKEN"@github.com/$PLUGINS_REPO.git
     # Set up the default remote URL
-    gh repo set-default https://"$github_token"@github.com/$PLUGINS_REPO.git
+    gh repo set-default https://"$GH_TOKEN"@github.com/$PLUGINS_REPO.git
 }
 
 commit_and_push_changes() {
@@ -130,21 +130,23 @@ commit_and_push_changes() {
         mv "$CURRENT_PATH/ecs/$ecs_module/$MAPPINGS_SUBPATH" "$TEMPLATES_PATH/$target_file"
     done
 
+    git status --short
+
     if ! git diff-index --quiet HEAD --; then
+        echo "Changes detected. Committing and pushing to the repository..."
         git add .
         git commit -m "Update ECS templates for modified modules: ${relevant_modules[*]}"
         git push
-        return 0
     else
         echo "Nothing to commit, working tree clean."
-        return 1
+        exit 0
     fi
 }
 
 create_or_update_pr() {
     echo
     echo "---> Creating or updating Pull Request..."
-    echo "$github_token" | gh auth login --with-token
+    echo "$GH_TOKEN" | gh auth login --with-token
     local existing_pr
     local modules
     local title="Update ECS templates for modified modules: ${modules}"
@@ -167,9 +169,10 @@ create_or_update_pr() {
 }
 
 usage() {
-    echo "Usage: $0 -b <branch_name> -t <github_token>"
-    echo "  -b <branch_name>  Branch name to create or update the PR."
-    echo "  -t <github_token> GitHub token to authenticate with GitHub API."
+    echo "Usage: $0 -b <branch_name> -t <GH_TOKEN>"
+    echo "  -b <branch_name>    Branch name to create or update the PR."
+    echo "  -t [GH_TOKEN]       (Optional) GitHub token to authenticate with GitHub API."
+    echo "                      If not provided, the script will use the GH_TOKEN environment variable."
     exit 1
 }
 
@@ -180,7 +183,7 @@ main() {
                 branch_name=$OPTARG
                 ;;
             t )
-                github_token=$OPTARG
+                GH_TOKEN=$OPTARG
                 ;;
             \? )
                 usage
@@ -191,21 +194,16 @@ main() {
                 ;;
         esac
     done
-    if [ -z "$branch_name" ] || [ -z "$github_token" ]; then
+    if [ -z "$branch_name" ] || [ -z "$GH_TOKEN" ]; then
         usage
     fi
 
     validate_dependencies
     fetch_and_extract_modules
-    run_ecs_generator
+    run_ecs_generator # Exit if no changes on relevant modules.
     clone_target_repo
-    commit_and_push_changes
-
-    pr_required=$?
-    if $pr_required; then
-        create_or_update_pr
-    fi
-    echo "ECS Generator script completed."
+    commit_and_push_changes # Exit if no changes detected.
+    create_or_update_pr
 }
 
 main "$@"
