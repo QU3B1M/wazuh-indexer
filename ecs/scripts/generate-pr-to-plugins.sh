@@ -97,6 +97,10 @@ clone_target_repo() {
     git config --global user.email "github-actions@github.com"
     git config --global user.name "GitHub Actions"
     git pull
+    # Set up authentication with GitHub token
+    git remote set-url origin https://"$GITHUB_TOKEN"@github.com/$PLUGINS_REPO.git
+    # Set up the default remote URL
+    gh repo set-default https://"$GITHUB_TOKEN"@github.com/$PLUGINS_REPO.git
 }
 
 commit_and_push_changes() {
@@ -141,7 +145,7 @@ commit_and_push_changes() {
 create_or_update_pr() {
     echo
     echo "---> Creating or updating Pull Request..."
-    gh auth login --with-token
+    # gh auth login --with-token
     local existing_pr
     local modules
     local title="Update ECS templates for modified modules: ${modules}"
