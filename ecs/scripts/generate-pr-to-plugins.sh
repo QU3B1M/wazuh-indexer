@@ -169,9 +169,35 @@ create_or_update_pr() {
     fi
 }
 
+usage() {
+    echo "Usage: $0 -b <branch_name> -t <github_token>"
+    echo "  -b <branch_name>  Branch name to create or update the PR."
+    echo "  -t <github_token> GitHub token to authenticate with GitHub API."
+    exit 1
+}
+
 main() {
-    branch_name=$1
-    github_token=$2
+    while getopts ":b:t:" opt; do
+        case ${opt} in
+            b )
+                branch_name=$OPTARG
+                ;;
+            t )
+                github_token=$OPTARG
+                ;;
+            \? )
+                usage
+                ;;
+            : )
+                echo "Invalid option: $OPTARG requires an argument" 1>&2
+                usage
+                ;;
+        esac
+    done
+    if [ -z "$branch_name" ] || [ -z "$github_token" ]; then
+        usage
+    fi
+
     validate_dependencies
     fetch_and_extract_modules
     run_ecs_generator
@@ -185,11 +211,5 @@ main() {
     fi
     echo "ECS Generator script completed."
 }
-
-# Check if branch name and GitHub token are provided
-if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Usage: $0 <branch_name> <github_token>"
-    exit 1
-fi
 
 main "$@"
