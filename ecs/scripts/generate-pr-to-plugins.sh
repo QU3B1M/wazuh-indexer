@@ -127,7 +127,7 @@ commit_and_push_changes() {
 
         mkdir -p $TEMPLATES_PATH
         echo "  - Copy template for module '$ecs_module' to '$target_file'"
-        mv "$CURRENT_PATH/ecs/$ecs_module/$MAPPINGS_SUBPATH" "$TEMPLATES_PATH/$target_file"
+        cp "$CURRENT_PATH/ecs/$ecs_module/$MAPPINGS_SUBPATH" "$TEMPLATES_PATH/$target_file"
     done
 
     git status --short
